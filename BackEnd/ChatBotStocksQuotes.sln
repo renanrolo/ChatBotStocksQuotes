@@ -3,9 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31402.337
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Presentation", "1 - Presentation", "{B29CD7CB-D23D-4D70-AB27-5F6E2758B2FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBotStocksQuotes.Api", "ChatBotStocksQuotes.Api\ChatBotStocksQuotes.Api.csproj", "{E5113FD2-7FEC-41EB-819D-C55934043B01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBotStocksQuotes.Api", "ChatBotStocksQuotes.Api\ChatBotStocksQuotes.Api.csproj", "{E5113FD2-7FEC-41EB-819D-C55934043B01}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBotStocksQuotes.Core", "ChatBotStocksQuotes.Core\ChatBotStocksQuotes.Core.csproj", "{632B246E-E12A-4EA2-836A-2E5CE811D9A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBotStocksQuotes.Tests", "ChatBotStocksQuotes.Tests\ChatBotStocksQuotes.Tests.csproj", "{01EC43BE-353B-4AAA-803F-BC536C2ACDC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBotStocksQuotes.Core.MessageBroker", "ChatBotStocksQuotes.Core.MessageBroker\ChatBotStocksQuotes.Core.MessageBroker.csproj", "{148E5F7D-54A8-4830-A87C-510CFEA098D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBotStocksQuotes.IoC", "ChatBotStocksQuotes.IoC\ChatBotStocksQuotes.IoC.csproj", "{0CD7D685-C137-410B-9898-CDD3DF641E23}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Presentation", "1 - Presentation", "{8F0EF37B-819B-4A1A-91DC-1E9F4781C205}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Core", "2 - Core", "{28D30B7B-D2D2-4176-87B3-7809516BF059}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Tests", "3 - Tests", "{9199F2B8-D67F-4839-A6B5-623748A1C04A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,12 +29,32 @@ Global
 		{E5113FD2-7FEC-41EB-819D-C55934043B01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5113FD2-7FEC-41EB-819D-C55934043B01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5113FD2-7FEC-41EB-819D-C55934043B01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{632B246E-E12A-4EA2-836A-2E5CE811D9A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{632B246E-E12A-4EA2-836A-2E5CE811D9A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{632B246E-E12A-4EA2-836A-2E5CE811D9A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{632B246E-E12A-4EA2-836A-2E5CE811D9A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01EC43BE-353B-4AAA-803F-BC536C2ACDC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01EC43BE-353B-4AAA-803F-BC536C2ACDC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01EC43BE-353B-4AAA-803F-BC536C2ACDC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01EC43BE-353B-4AAA-803F-BC536C2ACDC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{148E5F7D-54A8-4830-A87C-510CFEA098D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{148E5F7D-54A8-4830-A87C-510CFEA098D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{148E5F7D-54A8-4830-A87C-510CFEA098D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{148E5F7D-54A8-4830-A87C-510CFEA098D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CD7D685-C137-410B-9898-CDD3DF641E23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CD7D685-C137-410B-9898-CDD3DF641E23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CD7D685-C137-410B-9898-CDD3DF641E23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CD7D685-C137-410B-9898-CDD3DF641E23}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E5113FD2-7FEC-41EB-819D-C55934043B01} = {B29CD7CB-D23D-4D70-AB27-5F6E2758B2FA}
+		{E5113FD2-7FEC-41EB-819D-C55934043B01} = {8F0EF37B-819B-4A1A-91DC-1E9F4781C205}
+		{632B246E-E12A-4EA2-836A-2E5CE811D9A0} = {28D30B7B-D2D2-4176-87B3-7809516BF059}
+		{01EC43BE-353B-4AAA-803F-BC536C2ACDC6} = {9199F2B8-D67F-4839-A6B5-623748A1C04A}
+		{148E5F7D-54A8-4830-A87C-510CFEA098D7} = {28D30B7B-D2D2-4176-87B3-7809516BF059}
+		{0CD7D685-C137-410B-9898-CDD3DF641E23} = {28D30B7B-D2D2-4176-87B3-7809516BF059}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A2789B07-CC09-474A-B64B-C259ADC8785E}

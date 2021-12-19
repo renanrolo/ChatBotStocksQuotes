@@ -1,4 +1,5 @@
 using ChatBotStocksQuotes.Api.Ident;
+using ChatBotStocksQuotes.IoC;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -45,6 +46,9 @@ namespace ChatBotStocksQuotes.Api
                     return Task.CompletedTask;
                 };
             });
+
+            services.RegisterServices(Configuration)
+                    .RegisterEnviromentConfig(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
