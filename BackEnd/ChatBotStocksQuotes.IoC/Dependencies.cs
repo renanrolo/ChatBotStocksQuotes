@@ -2,6 +2,8 @@
 using ChatBotStocksQuotes.Core.Interfaces;
 using ChatBotStocksQuotes.Core.MessageBroker.Config;
 using ChatBotStocksQuotes.Core.MessageBroker.Implementations;
+using ChatBotStocksQuotes.Infra.Data.Context;
+using ChatBotStocksQuotes.Infra.Data.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,8 +15,11 @@ namespace ChatBotStocksQuotes.IoC
         {
             services.AddSingleton<RabbitMqUow>();
 
-            services.AddTransient<IChat, Chat>();
+            services.AddTransient<IChatService, ChatService>();
             services.AddTransient<IChatProvider, ChatProvider>();
+
+            services.AddTransient<IChatRepository, ChatRepository>();
+            //services.AddTransient<AuthDbContext>();
 
             return services;
         }

@@ -1,7 +1,10 @@
-﻿using ChatBotStocksQuotes.Core.Interfaces;
+﻿using ChatBotStocksQuotes.Api.Models;
+using ChatBotStocksQuotes.Core.Entities;
+using ChatBotStocksQuotes.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace ChatBotStocksQuotes.Api.Controllers
@@ -11,32 +14,32 @@ namespace ChatBotStocksQuotes.Api.Controllers
     [Authorize]
     public class ChatController : ControllerBase
     {
-        private readonly IChat _chat;
+        private readonly IChatService _chatService;
 
-        public ChatController(IChat chat)
+        public ChatController(IChatService chat)
         {
-            _chat = chat;
+            _chatService = chat;
         }
 
-        [HttpPost("new-chat")]
-        public NewChat NewChat()
+        [HttpGet]
+        public IEnumerable<Chat> GetAll()
         {
+            return _chatService.FindAll();
+        }
+
+        [HttpPost]
+        public IActionResult NewChat(NewChatRequest newChatRequest)
+        {
+            if (!newChatRequest.Validate(out var errors))
+            {
+                return BadRequest(new { errors });
+            }
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var chatUuid = _chat.NewChat(userId);
+            var newChat = _chatService.NewChat(newChatRequest.Name, userId);
 
-            return new NewChat
-            {
-                ChatUrl = "olaola",
-                ChatUuid = chatUuid
-            };
+            return Ok(new NewChatResponse(newChat));
         }
-    }
-
-
-    public class NewChat
-    {
-        public Guid ChatUuid { get; set; }
-        public string ChatUrl { get; set; }
     }
 }

@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ChatBotStocksQuotes.Core.MessageBroker\ChatBotStocksQuotes.Core.MessageBroker.csproj" />
+    <ProjectReference Include="..\ChatBotStocksQuotes.Infra.Data\ChatBotStocksQuotes.Infra.Data.csproj" />
   </ItemGroup>
 
 </Project>

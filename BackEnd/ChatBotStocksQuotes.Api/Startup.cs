@@ -1,4 +1,4 @@
-using ChatBotStocksQuotes.Api.Ident;
+using ChatBotStocksQuotes.Infra.Data.Context;
 using ChatBotStocksQuotes.IoC;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

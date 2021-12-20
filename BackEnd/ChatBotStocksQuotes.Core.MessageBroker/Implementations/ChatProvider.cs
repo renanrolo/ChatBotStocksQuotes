@@ -27,12 +27,8 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
 
         public void BindUserToChat(Guid chatId, string user)
         {
-            var topic = new StringBuilder().Append(chatId)
-                                           .Append(".user")
-                                           .ToString();
-
             var queueName = new StringBuilder().Append(chatId)
-                                           .Append(".")
+                                           .Append('.')
                                            .Append(user)
                                            .ToString();
 
@@ -44,7 +40,7 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
                  arguments: BuildQueueArguments()
              );
 
-            _rabbitMqUow.Chanel.QueueBind(queueName, _rabbitMqConfig.Exchange, topic, null);
+            _rabbitMqUow.Chanel.QueueBind(queueName, _rabbitMqConfig.Exchange, queueName, null);
         }
 
         private Dictionary<string, object> BuildQueueArguments()
@@ -56,6 +52,11 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
             queueParams.Add("x-max-length", _rabbitMqConfig.QueueMaxLength);
 
             return queueParams;
+        }
+
+        public bool ChatExists(Guid chatId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
