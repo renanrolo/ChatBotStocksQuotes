@@ -1,4 +1,5 @@
 ﻿using ChatBotStocksQuotes.Core.MessageBroker.Config;
+using ChatBotStocksQuotes.Core.Models;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -25,6 +26,8 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
         }
 
         protected readonly ConnectionFactory _connectionFactory;
+        private readonly RabbitMqConfig _rabbitMqConfig;
+
         public IModel Chanel
         {
             get
@@ -55,6 +58,7 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
             };
 
             Chanel.ExchangeDeclare(rabbitMqConfig.Exchange, "topic", true, false, null);
+            _rabbitMqConfig = rabbitMqConfig;
         }
 
         public void Dispose()
@@ -91,7 +95,7 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
             }
         }
 
-        public void Push(string queueName, object data)
+        public void Push(string topic, object data)
         {
             Chanel.ConfirmSelect();
 
@@ -100,20 +104,20 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
                 foreach (var item in collection)
                 {
                     var jsonData = JsonConvert.SerializeObject(item);
-                    Chanel.BasicPublish("", queueName, BasicProperties, Encoding.UTF8.GetBytes(jsonData));
+                    Chanel.BasicPublish(_rabbitMqConfig.Exchange, topic, BasicProperties, Encoding.UTF8.GetBytes(jsonData));
                 }
             }
             else
             {
                 var jsonData = JsonConvert.SerializeObject(data);
-                Chanel.BasicPublish("", queueName, BasicProperties, Encoding.UTF8.GetBytes(jsonData));
+                Chanel.BasicPublish(_rabbitMqConfig.Exchange, topic, BasicProperties, Encoding.UTF8.GetBytes(jsonData));
             }
 
             Chanel.WaitForConfirmsOrDie();
             Chanel.WaitForConfirms();
         }
 
-        public void KeepListening<T>(string queueName, Action<T> callback)
+        public void KeepListening<T>(string queueName, Action<T> callback) where T : MessageBase
         {
             var consumer = new EventingBasicConsumer(Chanel);
 
@@ -122,6 +126,7 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
             consumer.Received += (model, ea) =>
             {
                 T message = RabbitMQExtended.DeserializeResponse<T>(ea.Body.ToArray());
+                message.RoutingKey = ea.RoutingKey;
                 callback(message);
                 Chanel.BasicAck(ea.DeliveryTag, false);
             };
@@ -129,6 +134,8 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
             Chanel.BasicConsume(queue: queueName,
                                 autoAck: false,
                                 consumer: consumer);
+
+
         }
     }
 

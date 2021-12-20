@@ -32,6 +32,14 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
                                            .Append(user)
                                            .ToString();
 
+            var bindinUsers = new StringBuilder().Append(chatId)
+                                                 .Append(".users")
+                                                 .ToString();
+
+            var bindinToAllChat = new StringBuilder().Append(chatId)
+                                                     .Append(".all")
+                                                     .ToString();
+
             _rabbitMqUow.Chanel.QueueDeclare(
                  queue: queueName,
                  durable: true,
@@ -41,6 +49,8 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
              );
 
             _rabbitMqUow.Chanel.QueueBind(queueName, _rabbitMqConfig.Exchange, queueName, null);
+            _rabbitMqUow.Chanel.QueueBind(queueName, _rabbitMqConfig.Exchange, bindinUsers, null);
+            _rabbitMqUow.Chanel.QueueBind(queueName, _rabbitMqConfig.Exchange, bindinToAllChat, null);
         }
 
         private Dictionary<string, object> BuildQueueArguments()
