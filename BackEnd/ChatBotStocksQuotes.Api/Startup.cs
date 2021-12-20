@@ -23,6 +23,12 @@ namespace ChatBotStocksQuotes.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => options.WithOrigins("*").AllowAnyHeader()
+                                                  .AllowAnyMethod());
+            });
+
             services.AddDbContext<AuthDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
@@ -53,6 +59,9 @@ namespace ChatBotStocksQuotes.Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(options => options.WithOrigins("*").AllowAnyHeader()
+                                                .AllowAnyMethod());
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
