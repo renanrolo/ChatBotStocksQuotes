@@ -7,7 +7,7 @@ namespace ChatBotStocksQuotes.Core.Interfaces
     public interface IChatService
     {
         Chat NewChat(string chatName, string userId);
-        Guid? SignIn(Guid chatUuid, string userId);
+        Chat SignIn(Guid chatUuid, string userId);
         IEnumerable<Chat> FindAll();
     }
 }

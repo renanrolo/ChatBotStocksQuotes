@@ -112,10 +112,13 @@ namespace ChatBotStocksQuotes.Api.Controllers
 
         private async Task<UserToken> BuildToken(LoginRequest loginRequest)
         {
+            var user = await _userManager.FindByEmailAsync(loginRequest.Email);
+
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName, loginRequest.Email),
-                new Claim("meuValor", "oque voce quiser"),
+                new Claim(JwtRegisteredClaimNames.Email, loginRequest.Email),
+                new Claim("id", user.Id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
@@ -131,7 +134,6 @@ namespace ChatBotStocksQuotes.Api.Controllers
                expires: expiration,
                signingCredentials: creds);
 
-            var user = await _userManager.FindByEmailAsync(loginRequest.Email);
 
             return new UserToken()
             {

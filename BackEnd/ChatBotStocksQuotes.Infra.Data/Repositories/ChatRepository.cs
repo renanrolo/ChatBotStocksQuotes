@@ -18,7 +18,7 @@ namespace ChatBotStocksQuotes.Infra.Data.Repositories
 
         public Chat Find(Guid chatUuid)
         {
-            throw new NotImplementedException();
+            return _context.Chats.FirstOrDefault(x => x.Id == chatUuid);
         }
 
         public IEnumerable<Chat> FindAll()

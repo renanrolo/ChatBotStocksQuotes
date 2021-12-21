@@ -43,5 +43,25 @@ namespace ChatBotStocksQuotes.Api.Controllers
 
             return Ok(new NewChatResponse(newChat));
         }
+
+        [HttpGet("sign-in/{chatid}")]
+        [Authorize]
+        public IActionResult SignIn(Guid chatid)
+        {
+            var userId = User.FindFirstValue("id");
+
+            var chat = _chatService.SignIn(chatid, userId);
+
+            if (chat == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new { 
+                chat = chat
+            });
+
+        }
+
     }
 }

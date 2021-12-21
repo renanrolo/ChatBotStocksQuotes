@@ -21,11 +21,14 @@ namespace ChatBotStocksQuotes.Core.Implementations
             return _chatData.FindAll();
         }
 
-        public Chat NewChat(string chatName, string userId)
+        public Chat NewChat(string chatName, string userId = null)
         {
             var chatId = Guid.NewGuid();
 
-            _chatProvider.CreateChat(chatId, userId);
+            if (!String.IsNullOrEmpty(userId))
+            {
+                _chatProvider.CreateChat(chatId, userId);
+            }
 
             var chat = new Chat
             {
@@ -36,7 +39,7 @@ namespace ChatBotStocksQuotes.Core.Implementations
             return _chatData.Save(chat);
         }
 
-        public Guid? SignIn(Guid chatUuid, string userId)
+        public Chat SignIn(Guid chatUuid, string userId)
         {
             var chat = _chatData.Find(chatUuid);
 
@@ -47,7 +50,7 @@ namespace ChatBotStocksQuotes.Core.Implementations
 
             _chatProvider.CreateChat(chatUuid, userId);
 
-            return chatUuid;
+            return chat;
         }
     }
 }
