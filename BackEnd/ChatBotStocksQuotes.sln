@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Tests", "3 - Tests", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBotStocksQuotes.Infra.Data", "ChatBotStocksQuotes.Infra.Data\ChatBotStocksQuotes.Infra.Data.csproj", "{B41D010F-5301-4DE0-9EDB-81AFA721CF94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBotStocksQuotes.Bot", "ChatBotStocksQuotes.Bot\ChatBotStocksQuotes.Bot.csproj", "{2CC80CC7-92A3-4984-BEAE-02952BEF0B4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBotStocksQuotes.Bot", "ChatBotStocksQuotes.Bot\ChatBotStocksQuotes.Bot.csproj", "{2CC80CC7-92A3-4984-BEAE-02952BEF0B4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

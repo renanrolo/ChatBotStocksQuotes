@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ChatBotStocksQuotes.Api.Controllers
@@ -43,7 +44,7 @@ namespace ChatBotStocksQuotes.Api.Controllers
                 return Ok();
             }
 
-            return BadRequest(new { error = "Inválid Login" });
+            return BadRequest(new { errors = new string[] { "Inválid Login" } });
         }
 
         [HttpPost("Register")]
@@ -80,6 +81,24 @@ namespace ChatBotStocksQuotes.Api.Controllers
             await signInManager.SignOutAsync();
 
             return Ok();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> WhoAmI()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+
+            var logged = userId != null;
+
+            return Ok(new
+            {
+                Logged = logged,
+                UserId = userId,
+                Email = userEmail,
+                Message = logged ? $"Hello, {userEmail}!" : "Hello" 
+            });
         }
     }
 }

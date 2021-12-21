@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import StockApi from "../../services/stock-api";
+import { connect } from 'react-redux'
+import { bindActionCreators } from "redux"
+import * as AuthAction from "../../reducers/auth-action"
 
-function Login() {
+function Login({ onLogin }) {
+
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
 
@@ -33,19 +37,16 @@ function Login() {
     }
 
     const submitForm = function () {
+
         const form = {
             "Email": email,
             "Password": password
         }
 
-        StockApi.post("/Account/Login", form)
+        StockApi.post("api/Account/Login", form)
             .then(res => {
-                console.log(res);
-                Login(email);
+                onLogin({ Name: email })
             }).catch(e => {
-                console.log("caiu no erro");
-                console.log(e.response.data.errors);
-
                 const responseErrors = e?.response?.data?.errors;
 
                 if (!!responseErrors) {
@@ -61,12 +62,12 @@ function Login() {
         <div className="container">
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
-                    <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" value={email} onChange={e => setEmail(e.target.value)} />
+                    <label htmlFor="loginInputEmail">Email address</label>
+                    <input type="email" id="loginInputEmail" className="form-control" aria-describedby="emailHelp" placeholder="Enter email" value={email} onChange={e => setEmail(e.target.value)} />
                 </div>
                 <div className="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+                    <label htmlFor="loginInputPassword">Password</label>
+                    <input type="password" id="loginInputPassword" className="form-control" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
                 </div>
 
                 <br />
@@ -83,4 +84,6 @@ function Login() {
     );
 }
 
-export default Login;
+const mapStateToProps = state => (state)
+const mapDispatchToProps = dispatch => bindActionCreators(AuthAction, dispatch)
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -8,11 +8,11 @@ import {
 import Home from '../components/home';
 import Login from '../components/login';
 import Register from '../components/register';
-import Nav from "../components/nav/Nav"
+import Nav from "../components/nav/nav"
 
 const Routes = () => {
     return (
-        <div>
+        <>
             <Router>
                 <Nav />
                 <Switch>
@@ -21,7 +21,7 @@ const Routes = () => {
                     <Route element={<Register />} path="/Register" />
                 </Switch>
             </Router>
-        </div>
+        </>
     )
 }
 

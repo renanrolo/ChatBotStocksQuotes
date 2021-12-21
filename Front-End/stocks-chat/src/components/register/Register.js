@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import StockApi from "../../services/stock-api";
+import { connect } from 'react-redux'
+import { bindActionCreators } from "redux"
+import * as AuthAction from "../../reducers/auth-action"
 
 import { Login } from "../../services/auth-service"
 
-function Register() {
+function Register({ onLogin }) {
 
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
@@ -51,16 +54,11 @@ function Register() {
             "Password": password
         }
 
-        StockApi.post("/Account/Register", form)
+        StockApi.post("api/Account/Register", form)
             .then(res => {
-                console.log(res);
-                Login(email);
+                onLogin({ Name: email });
             }).catch(e => {
-                console.log("caiu no erro");
-                console.log(e.response.data.errors);
-
                 const responseErrors = e?.response?.data?.errors;
-
                 if (!!responseErrors) {
                     setErrors(responseErrors);
                 }
@@ -74,16 +72,16 @@ function Register() {
         <div className="container">
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
-                    <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" value={email} onChange={e => setEmail(e.target.value)} />
+                    <label htmlFor="registerInputEmail">Email address</label>
+                    <input type="email" className="form-control" id="registerInputEmail" aria-describedby="emailHelp" placeholder="Enter email" value={email} onChange={e => setEmail(e.target.value)} />
                 </div>
                 <div className="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+                    <label htmlFor="registerInputPassword">Password</label>
+                    <input type="password" className="form-control" id="registerInputPassword" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
                 </div>
                 <div className="form-group">
-                    <label for="exampleInputPassword1">Confirm Password</label>
-                    <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" value={passwordConfirm} onChange={e => setPasswordConfirm(e.target.value)} />
+                    <label htmlFor="registerInputPassword">Confirm Password</label>
+                    <input type="password" className="form-control" id="registerInputPassword" placeholder="Password" value={passwordConfirm} onChange={e => setPasswordConfirm(e.target.value)} />
                 </div>
 
                 <br />
@@ -99,5 +97,6 @@ function Register() {
         </div>
     );
 }
-
-export default Register;
+const mapStateToProps = state => (state)
+const mapDispatchToProps = dispatch => bindActionCreators(AuthAction, dispatch)
+export default connect(mapStateToProps, mapDispatchToProps)(Register);
