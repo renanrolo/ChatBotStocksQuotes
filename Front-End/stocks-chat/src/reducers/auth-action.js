@@ -3,5 +3,8 @@ export function onLogin(user) {
 }
 export function onLogOut() {
     return { type: 'AUTH_LOGOUT' }
+}
 
+export function onGetChats(chats) {
+    return { type: 'CHAT_GET_ALL', payload: chats }
 }

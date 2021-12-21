@@ -45,7 +45,16 @@ function Login({ onLogin }) {
 
         StockApi.post("api/Account/Login", form)
             .then(res => {
-                onLogin({ Name: email })
+                console.log(res.data);
+
+                const { token, expiration, id, email } = res.data;
+
+                onLogin({
+                    Token: token,
+                    Expiration: expiration,
+                    Id: id,
+                    Email: email
+                })
             }).catch(e => {
                 const responseErrors = e?.response?.data?.errors;
 

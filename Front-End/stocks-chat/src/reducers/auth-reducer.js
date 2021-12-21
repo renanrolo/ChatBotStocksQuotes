@@ -13,17 +13,26 @@ export default function authReducer(state = INITIAL_STATE, action) {
         case 'AUTH_LOGIN_USER': {
             const user = action.payload;
 
-            return {
+            return saveState({
                 ...state,
                 User: user
-            };
+            });
         }
 
         case 'AUTH_LOGOUT': {
-            return {
+            return saveState({
                 ...state,
                 User: null
-            };
+            });
+        }
+            
+        case 'CHAT_GET_ALL': {
+            const chats = action.payload;
+
+            return saveState({
+                ...state,
+                Chats: chats
+            });
         }
             
         // case 'ADD_TURNO':

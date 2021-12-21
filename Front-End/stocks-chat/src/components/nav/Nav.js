@@ -26,7 +26,7 @@ function Nav({ User, onLogOut }) {
                             (
                                 <>
                                     <li className="nav-item">
-                                        <p className="nav navbar-text">Hello, {User.Name}</p>
+                                        <p className="nav navbar-text">Hello, {User.Email}</p>
                                     </li>
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/" onClick={logOut}>Logout</Link>

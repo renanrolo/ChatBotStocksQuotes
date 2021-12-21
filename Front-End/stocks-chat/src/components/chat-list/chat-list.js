@@ -5,15 +5,16 @@ import * as AuthAction from "../../reducers/auth-action"
 import stockApi from "../../services/stock-api";
 import React, { useState, useEffect } from 'react';
 
-function ChatList({ Chats, onLogin }) {
+function ChatList({ User, Chats, onLogin, onGetChats }) {
 
-    useEffect(() => {
-        getChatList()
-    });
+    // useEffect(() => {
+    //     getChatList()
+    // });
 
     const getChatList = function () {
-        stockApi.get("api/chat")
+        stockApi.get("api/chat", { headers: { "Authorization": `Bearer ${User.Token}` } })
             .then(res => {
+                onGetChats(res.data)
                 console.log("chat list", res)
             });
     }
@@ -23,15 +24,20 @@ function ChatList({ Chats, onLogin }) {
             <h1>Chat list</h1>
             <div className="card">
                 <ul className="list-group list-group-flush">
+                    {console.log(Chats)}
                     {Chats.length > 0 ?
-                        Chats.map((item, index) => 
-                            <li key="index" className="list-group-item">{item}</li>
+                        Chats.map((item) => 
+                            <li key={item.id} className="list-group-item">{item.name}</li>
                         )
                         :
                         (<li className="list-group-item">No chats found</li>)
                     }
                 </ul>
             </div>
+
+            <br />
+            
+            <button type="button" className="btn btn-primary" onClick={getChatList}>Get Chats</button>
         </div>
     )
 

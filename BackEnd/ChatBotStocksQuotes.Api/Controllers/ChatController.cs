@@ -22,12 +22,14 @@ namespace ChatBotStocksQuotes.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IEnumerable<Chat> GetAll()
         {
             return _chatService.FindAll();
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult NewChat(NewChatRequest newChatRequest)
         {
             if (!newChatRequest.Validate(out var errors))
