@@ -8,7 +8,8 @@ import {
 import Home from '../components/home';
 import Login from '../components/login';
 import Register from '../components/register';
-import Nav from "../components/nav/nav"
+import Nav from "../components/nav/nav";
+import Chat from "../components/chat/chat";
 
 const Routes = () => {
     return (
@@ -19,6 +20,7 @@ const Routes = () => {
                     <Route element={<Home />} path="/" exact />
                     <Route element={<Login />} path="/Login" />
                     <Route element={<Register />} path="/Register" />
+                    <Route element={<Chat />} path="/chat/:id" />
                 </Switch>
             </Router>
         </>

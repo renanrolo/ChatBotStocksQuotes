@@ -1,11 +1,14 @@
-﻿using ChatBotStocksQuotes.Api.Models;
+﻿using ChatBotStocksQuotes.Api.Hubs;
+using ChatBotStocksQuotes.Api.Models;
 using ChatBotStocksQuotes.Core.Entities;
 using ChatBotStocksQuotes.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace ChatBotStocksQuotes.Api.Controllers
 {
@@ -15,10 +18,12 @@ namespace ChatBotStocksQuotes.Api.Controllers
     public class ChatController : ControllerBase
     {
         private readonly IChatService _chatService;
+        private readonly IHubContext<ChatHub, IChatClient> _chatHub;
 
-        public ChatController(IChatService chat)
+        public ChatController(IChatService chat, IHubContext<ChatHub, IChatClient> chatHub)
         {
             _chatService = chat;
+            _chatHub = chatHub;
         }
 
         [HttpGet]
@@ -60,8 +65,20 @@ namespace ChatBotStocksQuotes.Api.Controllers
             return Ok(new { 
                 chat = chat
             });
-
         }
 
+        [HttpPost("message")]
+        [Authorize]
+        public async Task<IActionResult> ReceiveMessage(ChatMessage chatMessage)
+        {
+            if (!chatMessage.Validate(out var errors))
+            {
+                return BadRequest(new { errors });
+            }
+
+            await _chatHub.Clients.All.ReceiveMessage(chatMessage);
+
+            return Ok();
+        }
     }
 }

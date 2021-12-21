@@ -21,7 +21,7 @@ export default function authReducer(state = INITIAL_STATE, action) {
 
         case 'AUTH_LOGOUT': {
             return saveState({
-                ...state,
+                Chats: null,
                 User: null
             });
         }

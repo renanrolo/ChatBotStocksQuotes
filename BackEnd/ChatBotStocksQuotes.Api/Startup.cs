@@ -1,3 +1,4 @@
+using ChatBotStocksQuotes.Api.Hubs;
 using ChatBotStocksQuotes.Infra.Data.Context;
 using ChatBotStocksQuotes.IoC;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -27,11 +28,16 @@ namespace ChatBotStocksQuotes.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(c =>
-            {
-                c.AddPolicy("AllowOrigin", options => options.WithOrigins("*").AllowAnyHeader()
-                                                  .AllowAnyMethod());
-            });
+            //services.AddCors(c =>
+            //{
+            //    c.AddPolicy("AllowAnyOrigin", options => options.AllowAnyHeader()
+            //                                                    .AllowAnyMethod()
+            //                                                    .AllowAnyOrigin()
+            //                                                    .AllowCredentials()
+            //                );
+            //});
+
+            services.AddCors();
 
             services.AddDbContext<AuthDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
@@ -79,12 +85,23 @@ namespace ChatBotStocksQuotes.Api
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["jwt:key"])),
                         ClockSkew = TimeSpan.Zero
                     });
+
+            services.AddSignalR();
+            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors(options => options.WithOrigins("*").AllowAnyHeader()
-                                                .AllowAnyMethod());
+            //app.UseCors("AllowAnyOrigin");
+            //app.UseCors(options => options.AllowAnyOrigin()
+            //                              .AllowAnyHeader()
+            //                              .AllowAnyMethod());
+
+            app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials());
 
             if (env.IsDevelopment())
             {
@@ -104,6 +121,7 @@ namespace ChatBotStocksQuotes.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/hubs/chat");
             });
         }
     }

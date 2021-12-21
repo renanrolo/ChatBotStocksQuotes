@@ -4,6 +4,9 @@ import { bindActionCreators } from "redux"
 import * as AuthAction from "../../reducers/auth-action"
 import stockApi from "../../services/stock-api";
 import React, { useState, useEffect } from 'react';
+import {
+    Link
+} from "react-router-dom";
 
 function ChatList({ User, Chats, onLogin, onGetChats }) {
 
@@ -26,8 +29,8 @@ function ChatList({ User, Chats, onLogin, onGetChats }) {
                 <ul className="list-group list-group-flush">
                     {console.log(Chats)}
                     {Chats.length > 0 ?
-                        Chats.map((item) => 
-                            <li key={item.id} className="list-group-item">{item.name}</li>
+                        Chats.map((item) =>
+                            <Link key={item.id} className="list-group-item" to={`/chat/${item.id}`}>{item.name}</Link>
                         )
                         :
                         (<li className="list-group-item">No chats found</li>)
@@ -36,7 +39,7 @@ function ChatList({ User, Chats, onLogin, onGetChats }) {
             </div>
 
             <br />
-            
+
             <button type="button" className="btn btn-primary" onClick={getChatList}>Get Chats</button>
         </div>
     )
