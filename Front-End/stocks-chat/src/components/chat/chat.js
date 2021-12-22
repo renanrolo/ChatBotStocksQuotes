@@ -1,49 +1,67 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { HubConnectionBuilder } from '@microsoft/signalr';
-
+import { useParams } from 'react-router-dom';
 import ChatWindow from './chat-window';
 import ChatInput from './chat-input';
+import { connect } from 'react-redux'
+import { bindActionCreators } from "redux"
+import stockApi from "../../services/stock-api";
+import * as AuthAction from "../../reducers/auth-action";
 
-function Chat() {
+function Chat({ User }) {
     const [chat, setChat] = useState([]);
     const latestChat = useRef(null);
 
     latestChat.current = chat;
+    const { id } = useParams();
 
     useEffect(() => {
         const connection = new HubConnectionBuilder()
-            .withUrl('https://localhost:5001/hubs/chat')
+            .withUrl(process.env.REACT_APP_STOCK_CHAT_HUB)
             .withAutomaticReconnect()
             .build();
 
         connection.start()
             .then(result => {
-                console.log('Connected!');
-
                 connection.on('ReceiveMessage', message => {
                     const updatedChat = [...latestChat.current];
                     updatedChat.push(message);
-
                     setChat(updatedChat);
+                    console.log("ReceiveMessage", message);
                 });
+
+                const chatParam = {
+                    ChatId: id,
+                    UserId: User.Id
+                }
+
+                connection.send("EnterChat", chatParam)
             })
             .catch(e => console.log('Connection failed: ', e));
     }, []);
 
     const sendMessage = async (user, message) => {
         const chatMessage = {
-            user: user,
-            message: message
+            From: user,
+            Message: message,
+            ChatId: id
         };
 
         try {
-            await fetch('https://localhost:5001/api/chat/message', {
-                method: 'POST',
-                body: JSON.stringify(chatMessage),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            stockApi.post("api/chat/message", chatMessage, { headers: { "Authorization": `Bearer ${User.Token}` } })
+                .then(res => {
+                    
+                }).catch(e => {
+                    console.log("Unable to send message", e)
+                });
+
+            // await fetch('https://localhost:5001/api/chat/message', {
+            //     method: 'POST',
+            //     body: JSON.stringify(chatMessage),
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     }
+            // });
         }
         catch (e) {
             console.log('Sending message failed.', e);
@@ -59,4 +77,6 @@ function Chat() {
     );
 };
 
-export default Chat;
+const mapStateToProps = state => (state)
+const mapDispatchToProps = dispatch => bindActionCreators(AuthAction, dispatch)
+export default connect(mapStateToProps, mapDispatchToProps)(Chat);

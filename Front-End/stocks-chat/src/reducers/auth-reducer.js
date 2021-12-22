@@ -91,7 +91,6 @@ function loadState() {
     try {
         const state = JSON.parse(localStorage.getItem(key))
         if (!!state) {
-            console.log("user loaded from localStorage", state)
             return state;
         }
     } catch (e) {

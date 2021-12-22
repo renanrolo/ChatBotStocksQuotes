@@ -117,7 +117,7 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
             Chanel.WaitForConfirms();
         }
 
-        public void KeepListening<T>(string queueName, Action<T> callback) where T : MessageBase
+        public string KeepListening<T>(string queueName, string consumerTag, Action<T> callback) where T : MessageBase
         {
             var consumer = new EventingBasicConsumer(Chanel);
 
@@ -131,10 +131,15 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
                 Chanel.BasicAck(ea.DeliveryTag, false);
             };
 
-            Chanel.BasicConsume(queue: queueName,
-                                autoAck: false,
-                                consumer: consumer);
+            return Chanel.BasicConsume(queue: queueName,
+                                       consumerTag: consumerTag,
+                                       autoAck: false,
+                                       consumer: consumer);
+        }
 
+        public void CancelListening(string consumerTag)
+        {
+            Chanel.BasicCancel(consumerTag);
 
         }
     }

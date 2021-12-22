@@ -3,8 +3,11 @@ import StockApi from "../../services/stock-api";
 import { connect } from 'react-redux'
 import { bindActionCreators } from "redux"
 import * as AuthAction from "../../reducers/auth-action"
+import { useNavigate } from 'react-router-dom';
 
 function Login({ onLogin }) {
+
+    const navigate = useNavigate()
 
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
@@ -45,8 +48,6 @@ function Login({ onLogin }) {
 
         StockApi.post("api/Account/Login", form)
             .then(res => {
-                console.log(res.data);
-
                 const { token, expiration, id, email } = res.data;
 
                 onLogin({
@@ -54,7 +55,10 @@ function Login({ onLogin }) {
                     Expiration: expiration,
                     Id: id,
                     Email: email
-                })
+                });
+
+                navigate("/");
+
             }).catch(e => {
                 const responseErrors = e?.response?.data?.errors;
 

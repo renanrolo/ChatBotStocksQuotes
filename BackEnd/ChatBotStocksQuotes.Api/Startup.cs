@@ -1,3 +1,4 @@
+using ChatBotStocksQuotes.Api.Filters;
 using ChatBotStocksQuotes.Api.Hubs;
 using ChatBotStocksQuotes.Infra.Data.Context;
 using ChatBotStocksQuotes.IoC;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,7 +39,18 @@ namespace ChatBotStocksQuotes.Api
             //                );
             //});
 
-            services.AddCors();
+            //services.AddCors();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("ClientPermission", policy =>
+                {
+                    policy.AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .WithOrigins("http://localhost:3000")
+                        .AllowCredentials();
+                });
+            });
 
             services.AddDbContext<AuthDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
@@ -86,8 +99,11 @@ namespace ChatBotStocksQuotes.Api
                         ClockSkew = TimeSpan.Zero
                     });
 
-            services.AddSignalR();
-            
+            services.AddSignalR(options =>
+            {
+                options.AddFilter<TokenFilter>();
+            });
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -97,11 +113,18 @@ namespace ChatBotStocksQuotes.Api
             //                              .AllowAnyHeader()
             //                              .AllowAnyMethod());
 
-            app.UseCors(x => x
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .SetIsOriginAllowed(origin => true) // allow any origin
-                .AllowCredentials());
+            //app.UseCors(x => x
+            //    .AllowAnyMethod()
+            //    .AllowAnyHeader()
+            //    .SetIsOriginAllowed(origin => true) // allow any origin
+            //    .AllowCredentials());
+
+            app.UseCors("ClientPermission");
+
+            //app.UseCors(x => x
+            //   .AllowAnyMethod()
+            //   .AllowAnyHeader()
+            //   .AllowAnyOrigin());
 
             if (env.IsDevelopment())
             {

@@ -7,18 +7,25 @@ import React, { useState, useEffect } from 'react';
 import {
     Link
 } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 function ChatList({ User, Chats, onLogin, onGetChats }) {
 
-    // useEffect(() => {
-    //     getChatList()
-    // });
+    const navigate = useNavigate()
 
     const getChatList = function () {
         stockApi.get("api/chat", { headers: { "Authorization": `Bearer ${User.Token}` } })
             .then(res => {
                 onGetChats(res.data)
-                console.log("chat list", res)
+            });
+    }
+
+    const signInChat = function (chatId) {
+        stockApi.get(`api/chat/sign-in/${chatId}`, { headers: { "Authorization": `Bearer ${User.Token}` } })
+            .then(res => {
+                navigate(`/chat/${chatId}`)
+            }).catch(e => {
+                getChatList();
             });
     }
 
@@ -27,10 +34,9 @@ function ChatList({ User, Chats, onLogin, onGetChats }) {
             <h1>Chat list</h1>
             <div className="card">
                 <ul className="list-group list-group-flush">
-                    {console.log(Chats)}
-                    {Chats.length > 0 ?
+                    {!!Chats && Chats.length > 0 ?
                         Chats.map((item) =>
-                            <Link key={item.id} className="list-group-item" to={`/chat/${item.id}`}>{item.name}</Link>
+                            <li key={item.id} className="list-group-item cursor-pointer" onClick={() => signInChat(item.id)}>{item.name}</li>
                         )
                         :
                         (<li className="list-group-item">No chats found</li>)

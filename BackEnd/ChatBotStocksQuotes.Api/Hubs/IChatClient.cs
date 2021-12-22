@@ -1,4 +1,4 @@
-﻿using ChatBotStocksQuotes.Api.Models;
+﻿using ChatBotStocksQuotes.Core.Models;
 using System.Threading.Tasks;
 
 namespace ChatBotStocksQuotes.Api.Hubs

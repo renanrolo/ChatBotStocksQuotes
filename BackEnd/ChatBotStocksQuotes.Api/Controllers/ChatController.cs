@@ -2,6 +2,7 @@
 using ChatBotStocksQuotes.Api.Models;
 using ChatBotStocksQuotes.Core.Entities;
 using ChatBotStocksQuotes.Core.Interfaces;
+using ChatBotStocksQuotes.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -20,9 +21,9 @@ namespace ChatBotStocksQuotes.Api.Controllers
         private readonly IChatService _chatService;
         private readonly IHubContext<ChatHub, IChatClient> _chatHub;
 
-        public ChatController(IChatService chat, IHubContext<ChatHub, IChatClient> chatHub)
+        public ChatController(IChatService chatService, IHubContext<ChatHub, IChatClient> chatHub)
         {
-            _chatService = chat;
+            _chatService = chatService;
             _chatHub = chatHub;
         }
 
@@ -76,7 +77,7 @@ namespace ChatBotStocksQuotes.Api.Controllers
                 return BadRequest(new { errors });
             }
 
-            await _chatHub.Clients.All.ReceiveMessage(chatMessage);
+            _chatService.SendMessage(chatMessage);
 
             return Ok();
         }

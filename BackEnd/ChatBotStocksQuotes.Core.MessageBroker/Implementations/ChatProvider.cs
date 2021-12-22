@@ -1,10 +1,9 @@
 ﻿using ChatBotStocksQuotes.Core.Interfaces;
 using ChatBotStocksQuotes.Core.MessageBroker.Config;
+using ChatBotStocksQuotes.Core.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
 {
@@ -67,6 +66,21 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
         public bool ChatExists(Guid chatId)
         {
             throw new NotImplementedException();
+        }
+
+        public void KeepListening<T>(string queueName, string consumerTag, Action<T> callback) where T : MessageBase
+        {
+            _rabbitMqUow.KeepListening(queueName, consumerTag, callback);
+        }
+
+        public void CancelListening(string consumerTag)
+        {
+            _rabbitMqUow.CancelListening(consumerTag);
+        }
+
+        public void SendMessage(string topic, object data)
+        {
+            _rabbitMqUow.Push(topic, data);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using ChatBotStocksQuotes.Core.Entities;
 using ChatBotStocksQuotes.Core.Interfaces;
+using ChatBotStocksQuotes.Core.Models;
 using System;
 using System.Collections.Generic;
 
@@ -51,6 +52,13 @@ namespace ChatBotStocksQuotes.Core.Implementations
             _chatProvider.CreateChat(chatUuid, userId);
 
             return chat;
+        }
+
+        public void SendMessage(ChatMessage chatMessage)
+        {
+            var topic = $"{chatMessage.ChatId}.all";
+
+            _chatProvider.SendMessage(topic, chatMessage);
         }
     }
 }
