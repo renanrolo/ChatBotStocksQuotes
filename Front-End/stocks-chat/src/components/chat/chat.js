@@ -3,10 +3,8 @@ import { HubConnectionBuilder } from '@microsoft/signalr';
 import { useParams } from 'react-router-dom';
 import ChatWindow from './chat-window';
 import ChatInput from './chat-input';
-import { connect } from 'react-redux'
-import { bindActionCreators } from "redux"
 import stockApi from "../../services/stock-api";
-import * as AuthAction from "../../reducers/auth-action";
+import ReducerConnect from '../../reducers/reducer-connect';
 
 function Chat({ User }) {
     const [chat, setChat] = useState([]);
@@ -23,10 +21,7 @@ function Chat({ User }) {
 
         connection.start()
             .then(result => {
-                console.log("entered chat")
-
                 connection.on('ReceiveMessage', message => {
-                    console.log("ReceiveMessage", message);
                     const updatedChat = [...latestChat.current];
                     updatedChat.push(message);
                     setChat(updatedChat);
@@ -36,8 +31,6 @@ function Chat({ User }) {
                     ChatId: id,
                     UserId: User.Id
                 }
-
-                connection.send("EnterChat", chatParam)
             })
             .catch(e => console.log('Connection failed: ', e));
         
@@ -53,7 +46,6 @@ function Chat({ User }) {
         try {
             stockApi.post("api/chat/message", chatMessage, { headers: { "Authorization": `Bearer ${User.Token}` } })
                 .then(res => {
-                    console.log("message sent", res)
                 }).catch(e => {
                     console.log("Unable to send message", e)
                 });
@@ -72,6 +64,4 @@ function Chat({ User }) {
     );
 };
 
-const mapStateToProps = state => (state)
-const mapDispatchToProps = dispatch => bindActionCreators(AuthAction, dispatch)
-export default connect(mapStateToProps, mapDispatchToProps)(Chat);
+export default ReducerConnect(Chat);

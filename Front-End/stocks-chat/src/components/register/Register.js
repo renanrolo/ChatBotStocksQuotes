@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import StockApi from "../../services/stock-api";
-import { connect } from 'react-redux'
-import { bindActionCreators } from "redux"
-import * as AuthAction from "../../reducers/auth-action"
 import { useNavigate } from 'react-router-dom';
+import ReducerConnect from '../../reducers/reducer-connect';
 
 function Register({ onLogin }) {
 
@@ -107,6 +105,4 @@ function Register({ onLogin }) {
     );
 }
 
-const mapStateToProps = state => (state)
-const mapDispatchToProps = dispatch => bindActionCreators(AuthAction, dispatch)
-export default connect(mapStateToProps, mapDispatchToProps)(Register);
+export default ReducerConnect(Register);

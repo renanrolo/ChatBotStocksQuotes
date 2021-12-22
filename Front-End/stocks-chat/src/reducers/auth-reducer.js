@@ -4,8 +4,6 @@ const INITIAL_STATE = loadState();
 
 export default function authReducer(state = INITIAL_STATE, action) {
 
-    console.log("reducer foi chamado", action.type);
-
     switch (action.type) {
 
         case 'AUTH_LOGIN_USER': {

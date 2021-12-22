@@ -1,15 +1,17 @@
 import {
     Link
 } from "react-router-dom";
-import { connect } from 'react-redux'
-import { bindActionCreators } from "redux"
-import * as AuthAction from "../../reducers/auth-action"
+import ReducerConnect from "../../reducers/reducer-connect";
+import { useNavigate } from 'react-router-dom';
 
 function Nav({ User, onLogOut }) {
+
+    const navigate = useNavigate();
 
     const logOut = function (e) {
         e.preventDefault();
         onLogOut();
+        navigate("/");
     }
 
     return (
@@ -55,6 +57,4 @@ function Nav({ User, onLogOut }) {
     );
 }
 
-const mapStateToProps = state => (state)
-const mapDispatchToProps = dispatch => bindActionCreators(AuthAction, dispatch)
-export default connect(mapStateToProps, mapDispatchToProps)(Nav);
+export default ReducerConnect(Nav);

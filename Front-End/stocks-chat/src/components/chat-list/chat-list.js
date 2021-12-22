@@ -1,9 +1,7 @@
-import { connect } from 'react-redux'
-import { bindActionCreators } from "redux"
-import * as AuthAction from "../../reducers/auth-action"
 import stockApi from "../../services/stock-api";
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ReducerConnect from '../../reducers/reducer-connect';
 
 function ChatList({ User, Chats, onLogin, onGetChats }) {
 
@@ -50,6 +48,4 @@ function ChatList({ User, Chats, onLogin, onGetChats }) {
 
 }
 
-const mapStateToProps = state => (state)
-const mapDispatchToProps = dispatch => bindActionCreators(AuthAction, dispatch)
-export default connect(mapStateToProps, mapDispatchToProps)(ChatList);
+export default ReducerConnect(ChatList);

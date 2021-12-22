@@ -1,10 +1,7 @@
 import './app.css';
 import Routes from "./routes";
 import React from 'react';
-import { connect } from 'react-redux'
-import { bindActionCreators } from "redux"
-import * as AuthAction from "../reducers/auth-action"
-
+import ReducerConnect from '../reducers/reducer-connect';
 
 function App() {
 
@@ -13,6 +10,4 @@ function App() {
   );
 }
 
-const mapStateToProps = state => (state)
-const mapDispatchToProps = dispatch => bindActionCreators(AuthAction, dispatch)
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default ReducerConnect(App);
