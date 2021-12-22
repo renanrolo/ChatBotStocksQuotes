@@ -36,23 +36,13 @@ namespace ChatBotStocksQuotes.Api.Hubs
 
             _chatProvider.KeepListening(queueName, consumerTag, async (ChatMessage message) =>
             {
-                //var chatMessage = new ChatMessage
-                //{
-                //    ChatId = chatSignIn.ChatId,
-                //    From = message.From,
-                //    Message = message.Message,
-                //    SentAt = message.SentAt
-                //};
-
                 Console.WriteLine($"{consumerTag} - ReceiveMessage: {message.Message}");
 
                 try
                 {
                     await Clients.Client(consumerTag).ReceiveMessage(message);
-
-                    //await Clients.Caller.ReceiveMessage(message);
                 }
-                catch (Exception ee )
+                catch
                 {
                     Console.WriteLine($"{consumerTag} - ReceiveMessage ERROR: {message.Message}");
                 }

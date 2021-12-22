@@ -32,7 +32,7 @@ namespace ChatBotStocksQuotes.Api.Controllers
 
         [HttpPost("Login")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserToken>> Login(LoginRequest model)
+        public async Task<ActionResult<UserTokenResponse>> Login(LoginRequest model)
         {
             if (!ModelState.IsValid)
             {
@@ -57,7 +57,7 @@ namespace ChatBotStocksQuotes.Api.Controllers
 
         [HttpPost("Register")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserToken>> Register(LoginRequest model)
+        public async Task<ActionResult<UserTokenResponse>> Register(RegisterRequest model)
         {
             if (!ModelState.IsValid)
             {
@@ -91,33 +91,14 @@ namespace ChatBotStocksQuotes.Api.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> WhoAmI()
+        private async Task<UserTokenResponse> BuildToken(UserIdentificationBase userIdentification)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userEmail = User.FindFirstValue(ClaimTypes.Email);
-
-            var logged = userId != null;
-
-            return Ok(new
-            {
-                Logged = logged,
-                UserId = userId,
-                Email = userEmail,
-                Message = logged ? $"Hello, {userEmail}!" : "Hello"
-            });
-        }
-
-
-        private async Task<UserToken> BuildToken(LoginRequest loginRequest)
-        {
-            var user = await _userManager.FindByEmailAsync(loginRequest.Email);
+            var user = await _userManager.FindByEmailAsync(userIdentification.Email);
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.UniqueName, loginRequest.Email),
-                new Claim(JwtRegisteredClaimNames.Email, loginRequest.Email),
+                new Claim(JwtRegisteredClaimNames.UniqueName, userIdentification.Email),
+                new Claim(JwtRegisteredClaimNames.Email, userIdentification.Email),
                 new Claim("id", user.Id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
@@ -136,7 +117,7 @@ namespace ChatBotStocksQuotes.Api.Controllers
                expires: expiration,
                signingCredentials: creds);
 
-            return new UserToken()
+            return new UserTokenResponse()
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = expiration,

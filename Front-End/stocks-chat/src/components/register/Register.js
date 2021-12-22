@@ -3,10 +3,11 @@ import StockApi from "../../services/stock-api";
 import { connect } from 'react-redux'
 import { bindActionCreators } from "redux"
 import * as AuthAction from "../../reducers/auth-action"
-
-import { Login } from "../../services/auth-service"
+import { useNavigate } from 'react-router-dom';
 
 function Register({ onLogin }) {
+
+    const navigate = useNavigate()
 
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
@@ -20,7 +21,6 @@ function Register({ onLogin }) {
         if (validateForm()) {
             submitForm();
         }
-
     }
 
     const validateForm = function () {
@@ -56,7 +56,16 @@ function Register({ onLogin }) {
 
         StockApi.post("api/Account/Register", form)
             .then(res => {
-                onLogin({ Name: email });
+                const { token, expiration, id, email } = res.data;
+
+                onLogin({
+                    Token: token,
+                    Expiration: expiration,
+                    Id: id,
+                    Email: email
+                });
+
+                navigate("/");
             }).catch(e => {
                 const responseErrors = e?.response?.data?.errors;
                 if (!!responseErrors) {
@@ -97,6 +106,7 @@ function Register({ onLogin }) {
         </div>
     );
 }
+
 const mapStateToProps = state => (state)
 const mapDispatchToProps = dispatch => bindActionCreators(AuthAction, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(Register);

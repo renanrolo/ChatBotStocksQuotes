@@ -1,15 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace ChatBotStocksQuotes.Api.Models
+﻿namespace ChatBotStocksQuotes.Api.Models
 {
-    public class RegisterRequest
+    public class RegisterRequest : UserIdentificationBase
     {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
     }
 }

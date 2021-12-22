@@ -12,7 +12,7 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
     {
         private IConnection _connection;
         private IModel _model;
-        private IBasicProperties _basicProperties { get; set; }
+        private IBasicProperties _basicProperties;
         private IBasicProperties BasicProperties
         {
             get

@@ -17,8 +17,8 @@ namespace ChatBotStocksQuotes.Bot
         private readonly RabbitMqConfig _rabbitMqConfig;
         private readonly IChatProvider _chatProvider;
         private readonly IStockClient _stockClient;
-        private const string stockCommand = "/stock=";
-        private const string quoteTemplate = "{0} quote is ${1} per share";
+        private const string _stockCommand = "/stock=";
+        private const string _quoteTemplate = "{0} quote is ${1} per share";
 
         public Worker(RabbitMqUow rabbitMqUow, RabbitMqConfig rabbitMqConfig, IChatProvider chatProvider, IHttpClientFactory clientFactory, IStockClient stockClient)
         {
@@ -63,7 +63,7 @@ namespace ChatBotStocksQuotes.Bot
         {
             try
             {
-                if (!chatMessage.Message.StartsWith(stockCommand))
+                if (!chatMessage.Message.StartsWith(_stockCommand))
                 {
                     Console.WriteLine($"NOT: {chatMessage.Message}");
                     return null;
@@ -71,7 +71,7 @@ namespace ChatBotStocksQuotes.Bot
 
                 Console.WriteLine($"Command identified on message: {chatMessage.Message}");
 
-                var stockCode = chatMessage.Message.Replace(stockCommand, "");
+                var stockCode = chatMessage.Message.Replace(_stockCommand, "");
 
                 var stock = await _stockClient.GetStockQuote(stockCode);
 
@@ -87,7 +87,7 @@ namespace ChatBotStocksQuotes.Bot
                     Message = $"Sorry {chatMessage.From}, I couldn't find any quote for {stockCode}"
                 };
             }
-            catch (Exception ex)
+            catch
             {
                 return new ChatMessage
                 {
@@ -100,7 +100,7 @@ namespace ChatBotStocksQuotes.Bot
 
         private static ChatMessage InformStockQuote(ChatMessage chatMessage, Stock stock)
         {
-            var response = String.Format(quoteTemplate, stock.Symbol, stock.Close);
+            var response = String.Format(_quoteTemplate, stock.Symbol, stock.Close);
 
             return new ChatMessage
             {

@@ -1,4 +1,3 @@
-using ChatBotStocksQuotes.Api.Filters;
 using ChatBotStocksQuotes.Api.Hubs;
 using ChatBotStocksQuotes.Infra.Data.Context;
 using ChatBotStocksQuotes.IoC;
@@ -6,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,17 +28,6 @@ namespace ChatBotStocksQuotes.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddCors(c =>
-            //{
-            //    c.AddPolicy("AllowAnyOrigin", options => options.AllowAnyHeader()
-            //                                                    .AllowAnyMethod()
-            //                                                    .AllowAnyOrigin()
-            //                                                    .AllowCredentials()
-            //                );
-            //});
-
-            //services.AddCors();
-
             services.AddCors(options =>
             {
                 options.AddPolicy("ClientPermission", policy =>
@@ -83,9 +70,6 @@ namespace ChatBotStocksQuotes.Api
                     .RegisterRepositories()
                     .AddHttpClient();
 
-
-            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
             services.AddAuthentication(x =>
                 {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -102,34 +86,14 @@ namespace ChatBotStocksQuotes.Api
                         ClockSkew = TimeSpan.Zero
                     });
 
-            services.AddSignalR(options =>
-            {
-                options.AddFilter<TokenFilter>();
-            });
+            services.AddSignalR();
 
             services.AddSingleton<ChatHub>();
-
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //app.UseCors("AllowAnyOrigin");
-            //app.UseCors(options => options.AllowAnyOrigin()
-            //                              .AllowAnyHeader()
-            //                              .AllowAnyMethod());
-
-            //app.UseCors(x => x
-            //    .AllowAnyMethod()
-            //    .AllowAnyHeader()
-            //    .SetIsOriginAllowed(origin => true) // allow any origin
-            //    .AllowCredentials());
-
             app.UseCors("ClientPermission");
-
-            //app.UseCors(x => x
-            //   .AllowAnyMethod()
-            //   .AllowAnyHeader()
-            //   .AllowAnyOrigin());
 
             if (env.IsDevelopment())
             {

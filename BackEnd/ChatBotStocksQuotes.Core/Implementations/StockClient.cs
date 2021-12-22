@@ -10,7 +10,7 @@ namespace ChatBotStocksQuotes.Core.Implementations
     public class StockClient : IStockClient
     {
         private readonly IHttpClientFactory _clientFactory;
-        private const string url = "https://stooq.com/q/l/?s={0}&f=sd2t2ohlcv&h&e=csv";
+        private const string _url = "https://stooq.com/q/l/?s={0}&f=sd2t2ohlcv&h&e=csv";
 
         public StockClient(IHttpClientFactory clientFactory)
         {
@@ -19,7 +19,7 @@ namespace ChatBotStocksQuotes.Core.Implementations
 
         public async Task<Stock> GetStockQuote(string stockCode)
         {
-            var stockUrl = String.Format(url, stockCode);
+            var stockUrl = String.Format(_url, stockCode);
 
             var request = new HttpRequestMessage(HttpMethod.Get, stockUrl);
 
