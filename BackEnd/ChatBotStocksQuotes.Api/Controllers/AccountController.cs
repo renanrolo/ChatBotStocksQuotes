@@ -125,7 +125,9 @@ namespace ChatBotStocksQuotes.Api.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var expiration = DateTime.UtcNow.AddDays(1);
+            var tokenExpirationInHours = Convert.ToInt32(_configuration["Auth:TokenExpirationInHours"]);
+
+            var expiration = DateTime.UtcNow.AddHours(tokenExpirationInHours);
 
             JwtSecurityToken token = new JwtSecurityToken(
                issuer: null,
@@ -133,7 +135,6 @@ namespace ChatBotStocksQuotes.Api.Controllers
                claims: claims,
                expires: expiration,
                signingCredentials: creds);
-
 
             return new UserToken()
             {

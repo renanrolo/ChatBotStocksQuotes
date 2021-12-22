@@ -1,5 +1,4 @@
 ﻿using ChatBotStocksQuotes.Core.MessageBroker.Config;
-using ChatBotStocksQuotes.Core.Models;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;

@@ -6,6 +6,12 @@ namespace ChatBotStocksQuotes.Core.Models
 {
     public class Stock
     {
+        /// <summary>
+        /// Exemple: 
+        /// Symbol,Date,Time,Open,High,Low,Close,Volume
+        /// AAPL.US,2021-12-22,17:36:18,173.04,174.525,172.15,173.885,27996486
+        /// </summary>
+        /// <param name="line"></param>
         public Stock(string line)
         {
             var splitedLine = line.Split(",");
