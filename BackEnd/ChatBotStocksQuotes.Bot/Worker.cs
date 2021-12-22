@@ -5,6 +5,7 @@ using ChatBotStocksQuotes.Core.Models;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,13 +16,16 @@ namespace ChatBotStocksQuotes.Bot
         private readonly RabbitMqUow _rabbitMqUow;
         private readonly RabbitMqConfig _rabbitMqConfig;
         private readonly IChatProvider _chatProvider;
+        private readonly IStockClient _stockClient;
         private const string stockCommand = "/stock=";
+        private const string quoteTemplate = "{0} quote is ${1} per share";
 
-        public Worker(RabbitMqUow rabbitMqUow, RabbitMqConfig rabbitMqConfig, IChatProvider chatProvider)
+        public Worker(RabbitMqUow rabbitMqUow, RabbitMqConfig rabbitMqConfig, IChatProvider chatProvider, IHttpClientFactory clientFactory, IStockClient stockClient)
         {
             _rabbitMqUow = rabbitMqUow;
             _rabbitMqConfig = rabbitMqConfig;
             _chatProvider = chatProvider;
+            _stockClient = stockClient;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -41,9 +45,9 @@ namespace ChatBotStocksQuotes.Bot
 
                 _rabbitMqUow.Chanel.QueueBind(queueName, _rabbitMqConfig.Exchange, botTopic, null);
 
-                _rabbitMqUow.KeepListening(queueName, "bot", (ChatMessage message) =>
+                _rabbitMqUow.KeepListening(queueName, "bot", async (ChatMessage message) =>
                 {
-                    var botResponse = ProcessUserMessage(message);
+                    var botResponse = await ProcessUserMessage(message);
 
                     if (botResponse != null)
                     {
@@ -55,31 +59,54 @@ namespace ChatBotStocksQuotes.Bot
             }
         }
 
-        private ChatMessage ProcessUserMessage(ChatMessage chatMessage)
+        private async Task<ChatMessage> ProcessUserMessage(ChatMessage chatMessage)
         {
-            if (!chatMessage.Message.StartsWith(stockCommand))
+            try
             {
-                //return null;
+                if (!chatMessage.Message.StartsWith(stockCommand))
+                {
+                    Console.WriteLine($"NOT: {chatMessage.Message}");
+                    return null;
+                }
 
-                Console.WriteLine($"NOT: {chatMessage.Message}");
+                Console.WriteLine($"Command identified on message: {chatMessage.Message}");
+
+                var stockCode = chatMessage.Message.Replace(stockCommand, "");
+
+                var stock = await _stockClient.GetStockQuote(stockCode);
+
+                if (stock != null)
+                {
+                    return InformStockQuote(chatMessage, stock);
+                }
 
                 return new ChatMessage
                 {
                     ChatId = chatMessage.ChatId,
                     From = "bot",
-                    Message = $"NOT: {chatMessage.Message}"
+                    Message = $"Hello {chatMessage.From}, I couldn't find any quote for {stockCode}"
                 };
             }
+            catch (Exception ex)
+            {
+                return new ChatMessage
+                {
+                    ChatId = chatMessage.ChatId,
+                    From = "bot",
+                    Message = $"{chatMessage.From}, I was unable to search for quotes, please try again."
+                };
+            }
+        }
 
-            Console.WriteLine($"Command identified on message: {chatMessage.Message}");
-
-            var stockCode = chatMessage.Message.Replace(stockCommand, "");
+        private static ChatMessage InformStockQuote(ChatMessage chatMessage, Stock stock)
+        {
+            var response = String.Format(quoteTemplate, stock.Symbol, stock.Close);
 
             return new ChatMessage
             {
                 ChatId = chatMessage.ChatId,
                 From = "bot",
-                Message = $"Hello {chatMessage.From}, I got your question, I'll look for {stockCode} right away"
+                Message = response
             };
         }
 

@@ -80,7 +80,8 @@ namespace ChatBotStocksQuotes.Api
             services.RegisterEnviromentConfig(Configuration)
                     .RegisterServices()
                     .RegisterProviders()
-                    .RegisterRepositories();
+                    .RegisterRepositories()
+                    .AddHttpClient();
 
 
             //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

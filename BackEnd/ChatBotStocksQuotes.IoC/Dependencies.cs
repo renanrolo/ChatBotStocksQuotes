@@ -28,6 +28,7 @@ namespace ChatBotStocksQuotes.IoC
         {
             services.AddSingleton<RabbitMqUow>();
             services.AddTransient<IChatProvider, ChatProvider>();
+            services.AddTransient<IStockClient, StockClient>();
 
             return services;
         }

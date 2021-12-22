@@ -42,7 +42,9 @@ namespace ChatBotStocksQuotes.Bot
 
                 services.RegisterProviders()
                         .RegisterEnviromentConfig(configuration);
-                
+
+                services.AddHttpClient();
+
                 services.AddHostedService<Worker>();
             });
     }
