@@ -1,12 +1,8 @@
-import SotckApi from "../../services/stock-api";
 import { connect } from 'react-redux'
 import { bindActionCreators } from "redux"
 import * as AuthAction from "../../reducers/auth-action"
 import stockApi from "../../services/stock-api";
-import React, { useState, useEffect } from 'react';
-import {
-    Link
-} from "react-router-dom";
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function ChatList({ User, Chats, onLogin, onGetChats }) {
@@ -19,6 +15,8 @@ function ChatList({ User, Chats, onLogin, onGetChats }) {
                 onGetChats(res.data)
             });
     }
+
+    useEffect(getChatList, []);
 
     const signInChat = function (chatId) {
         stockApi.get(`api/chat/sign-in/${chatId}`, { headers: { "Authorization": `Bearer ${User.Token}` } })

@@ -57,14 +57,6 @@ function Chat({ User }) {
                 }).catch(e => {
                     console.log("Unable to send message", e)
                 });
-
-            // await fetch('https://localhost:5001/api/chat/message', {
-            //     method: 'POST',
-            //     body: JSON.stringify(chatMessage),
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     }
-            // });
         }
         catch (e) {
             console.log('Sending message failed.', e);
