@@ -84,7 +84,7 @@ namespace ChatBotStocksQuotes.Bot
                 {
                     ChatId = chatMessage.ChatId,
                     From = "bot",
-                    Message = $"Hello {chatMessage.From}, I couldn't find any quote for {stockCode}"
+                    Message = $"Sorry {chatMessage.From}, I couldn't find any quote for {stockCode}"
                 };
             }
             catch (Exception ex)

@@ -51,6 +51,11 @@ namespace ChatBotStocksQuotes.Core.Implementations
                             continue;
                         }
 
+                        if (line.Contains("N/D"))
+                        {
+                            return null;
+                        }
+
                         return new Stock(line);
                     }
                 }
