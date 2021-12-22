@@ -40,9 +40,9 @@ namespace ChatBotStocksQuotes.Bot
 
                 //services.AddSingleton(configuration.GetSection("ApplicationConfiguration").Get<ApplicationConfiguration>());
 
-                services.RegisterServices(configuration)
+                services.RegisterProviders()
                         .RegisterEnviromentConfig(configuration);
-
+                
                 services.AddHostedService<Worker>();
             });
     }

@@ -8,7 +8,12 @@ namespace ChatBotStocksQuotes.Core.Models
     {
         public string ChatId { get; set; }
         public string From { get; set; }
-        public string Message { get; set; }
+        private string _message;
+        public string Message
+        {
+            get { return _message; }
+            set { _message = !String.IsNullOrEmpty(value) ? value.Trim() : value; }
+        }
         public DateTime? SentAt { get; set; }
 
         public ChatMessage()

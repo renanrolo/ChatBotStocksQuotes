@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
 
 const ChatInput = (props) => {
-    const [user, setUser] = useState('');
+    const userEmail = props.User.Email;
+    //const [user, setUser] = useState('');
     const [message, setMessage] = useState('');
 
     const onSubmit = (e) => {
         e.preventDefault();
 
-        const isUserProvided = user && user !== '';
+        //const isUserProvided = user && user !== '';
         const isMessageProvided = message && message !== '';
 
-        if (isUserProvided && isMessageProvided) {
-            props.sendMessage(user, message);
+        if (isMessageProvided) {
+            props.sendMessage(userEmail, message);
         }
         else {
             alert('Please insert an user and a message.');
         }
     }
 
-    const onUserUpdate = (e) => {
-        setUser(e.target.value);
-    }
+    // const onUserUpdate = (e) => {
+    //     setUser(e.target.value);
+    // }
 
     const onMessageUpdate = (e) => {
         setMessage(e.target.value);
@@ -29,14 +30,14 @@ const ChatInput = (props) => {
     return (
         <form
             onSubmit={onSubmit}>
-            <label htmlFor="user">User:</label>
+            {/* <label htmlFor="user">User:</label>
             <br />
             <input
                 id="user"
                 name="user"
                 value={user}
                 onChange={onUserUpdate} />
-            <br />
+            <br /> */}
             <label htmlFor="message">Message:</label>
             <br />
             <input
@@ -46,7 +47,7 @@ const ChatInput = (props) => {
                 value={message}
                 onChange={onMessageUpdate} />
             <br /><br />
-            <button>Submit</button>
+            <button type="submit" className="btn btn-light">Send</button>
         </form>
     )
 };

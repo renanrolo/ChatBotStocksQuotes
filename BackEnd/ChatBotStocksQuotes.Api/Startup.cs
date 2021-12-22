@@ -77,8 +77,10 @@ namespace ChatBotStocksQuotes.Api
                 };
             });
 
-            services.RegisterServices(Configuration)
-                    .RegisterEnviromentConfig(Configuration);
+            services.RegisterEnviromentConfig(Configuration)
+                    .RegisterServices()
+                    .RegisterProviders()
+                    .RegisterRepositories();
 
 
             //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -103,6 +105,8 @@ namespace ChatBotStocksQuotes.Api
             {
                 options.AddFilter<TokenFilter>();
             });
+
+            services.AddSingleton<ChatHub>();
 
         }
 

@@ -95,7 +95,7 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
             }
         }
 
-        public void Push(string topic, object data)
+        public void Push<T>(string topic, T data)
         {
             Chanel.ConfirmSelect();
 
@@ -117,7 +117,7 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
             Chanel.WaitForConfirms();
         }
 
-        public string KeepListening<T>(string queueName, string consumerTag, Action<T> callback) where T : MessageBase
+        public string KeepListening<T>(string queueName, string consumerTag, Action<T> callback)
         {
             var consumer = new EventingBasicConsumer(Chanel);
 
@@ -126,7 +126,6 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
             consumer.Received += (model, ea) =>
             {
                 T message = RabbitMQExtended.DeserializeResponse<T>(ea.Body.ToArray());
-                message.RoutingKey = ea.RoutingKey;
                 callback(message);
                 Chanel.BasicAck(ea.DeliveryTag, false);
             };
@@ -139,7 +138,7 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
 
         public void CancelListening(string consumerTag)
         {
-            Chanel.BasicCancel(consumerTag);
+            Chanel?.BasicCancelNoWait(consumerTag);
 
         }
     }

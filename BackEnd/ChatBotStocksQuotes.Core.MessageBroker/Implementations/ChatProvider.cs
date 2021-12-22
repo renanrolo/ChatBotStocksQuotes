@@ -18,7 +18,6 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
             _rabbitMqUow = rabbitMqUow;
         }
 
-
         public void CreateChat(Guid chatId, string userId)
         {
             BindUserToChat(chatId, userId);
@@ -26,18 +25,9 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
 
         public void BindUserToChat(Guid chatId, string user)
         {
-            var queueName = new StringBuilder().Append(chatId)
-                                           .Append('.')
-                                           .Append(user)
-                                           .ToString();
-
-            var bindinUsers = new StringBuilder().Append(chatId)
-                                                 .Append(".users")
-                                                 .ToString();
-
-            var bindinToAllChat = new StringBuilder().Append(chatId)
-                                                     .Append(".all")
-                                                     .ToString();
+            string queueName = CreateTopic(chatId, user);
+            var bindinUsers = CreateTopic(chatId, "users");
+            var bindinToAllChat = CreateTopic(chatId, "all");
 
             _rabbitMqUow.Chanel.QueueDeclare(
                  queue: queueName,
@@ -52,23 +42,12 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
             _rabbitMqUow.Chanel.QueueBind(queueName, _rabbitMqConfig.Exchange, bindinToAllChat, null);
         }
 
-        private Dictionary<string, object> BuildQueueArguments()
-        {
-            var queueParams = new Dictionary<string, object>();
-
-            queueParams.Add("x-queue-mode", "lazy");
-
-            queueParams.Add("x-max-length", _rabbitMqConfig.QueueMaxLength);
-
-            return queueParams;
-        }
-
         public bool ChatExists(Guid chatId)
         {
             throw new NotImplementedException();
         }
 
-        public void KeepListening<T>(string queueName, string consumerTag, Action<T> callback) where T : MessageBase
+        public void KeepListening(string queueName, string consumerTag, Action<ChatMessage> callback)
         {
             _rabbitMqUow.KeepListening(queueName, consumerTag, callback);
         }
@@ -78,9 +57,35 @@ namespace ChatBotStocksQuotes.Core.MessageBroker.Implementations
             _rabbitMqUow.CancelListening(consumerTag);
         }
 
-        public void SendMessage(string topic, object data)
+        public void SendMessageToChatRoom(ChatMessage chatMessage)
         {
-            _rabbitMqUow.Push(topic, data);
+            var topic = CreateTopic(chatMessage.ChatId, "all");
+            _rabbitMqUow.Push(topic, chatMessage);
+        }
+
+        public void SendMessageToUsers(ChatMessage chatMessage)
+        {
+            var topic = CreateTopic(chatMessage.ChatId, "users");
+            _rabbitMqUow.Push(topic, chatMessage);
+        }
+
+        private string CreateTopic(object chatId, string user)
+        {
+            return new StringBuilder().Append(chatId)
+                                      .Append('.')
+                                      .Append(user)
+                                      .ToString();
+        }
+
+        private Dictionary<string, object> BuildQueueArguments()
+        {
+            var queueParams = new Dictionary<string, object>();
+
+            queueParams.Add("x-queue-mode", "lazy");
+
+            queueParams.Add("x-max-length", _rabbitMqConfig.QueueMaxLength);
+
+            return queueParams;
         }
     }
 }

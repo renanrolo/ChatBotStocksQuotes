@@ -7,8 +7,10 @@ namespace ChatBotStocksQuotes.Core.Interfaces
     {
         void CreateChat(Guid chatId, string userId);
         bool ChatExists(Guid chatId);
-        void KeepListening<T>(string queueName, string consumerTag, Action<T> callback) where T : MessageBase;
-        void SendMessage(string topic, object data);
+        void KeepListening(string queueName, string consumerTag, Action<ChatMessage> callback);
+        void SendMessageToChatRoom(ChatMessage chatMessage);
+
+        void SendMessageToUsers(ChatMessage chatMessage);
         void CancelListening(string consumerTag);
     }
 }

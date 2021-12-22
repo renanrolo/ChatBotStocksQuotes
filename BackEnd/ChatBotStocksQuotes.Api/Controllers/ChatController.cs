@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace ChatBotStocksQuotes.Api.Controllers
 {
@@ -70,8 +69,10 @@ namespace ChatBotStocksQuotes.Api.Controllers
 
         [HttpPost("message")]
         [Authorize]
-        public async Task<IActionResult> ReceiveMessage(ChatMessage chatMessage)
+        public IActionResult ReceiveMessage(ChatMessage chatMessage)
         {
+            Console.WriteLine($"Message received is valid: {chatMessage.Validate(out var _)} - {chatMessage.Message}");
+
             if (!chatMessage.Validate(out var errors))
             {
                 return BadRequest(new { errors });

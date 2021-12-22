@@ -23,12 +23,14 @@ function Chat({ User }) {
 
         connection.start()
             .then(result => {
+                console.log("entered chat")
+
                 connection.on('ReceiveMessage', message => {
+                    console.log("ReceiveMessage", message);
                     const updatedChat = [...latestChat.current];
                     updatedChat.push(message);
                     setChat(updatedChat);
-                    console.log("ReceiveMessage", message);
-                });
+                })
 
                 const chatParam = {
                     ChatId: id,
@@ -38,7 +40,8 @@ function Chat({ User }) {
                 connection.send("EnterChat", chatParam)
             })
             .catch(e => console.log('Connection failed: ', e));
-    }, []);
+        
+    }, [User, id]);
 
     const sendMessage = async (user, message) => {
         const chatMessage = {
@@ -50,7 +53,7 @@ function Chat({ User }) {
         try {
             stockApi.post("api/chat/message", chatMessage, { headers: { "Authorization": `Bearer ${User.Token}` } })
                 .then(res => {
-                    
+                    console.log("message sent", res)
                 }).catch(e => {
                     console.log("Unable to send message", e)
                 });
@@ -70,7 +73,7 @@ function Chat({ User }) {
 
     return (
         <div>
-            <ChatInput sendMessage={sendMessage} />
+            <ChatInput sendMessage={sendMessage} User={User} />
             <hr />
             <ChatWindow chat={chat} />
         </div>

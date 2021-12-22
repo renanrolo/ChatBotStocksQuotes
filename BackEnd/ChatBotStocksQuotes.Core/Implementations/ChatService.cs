@@ -9,17 +9,17 @@ namespace ChatBotStocksQuotes.Core.Implementations
     public class ChatService : IChatService
     {
         private readonly IChatProvider _chatProvider;
-        private readonly IChatRepository _chatData;
+        private readonly IChatRepository _chatRepository;
 
         public ChatService(IChatProvider chatProvider, IChatRepository chatData)
         {
             _chatProvider = chatProvider;
-            _chatData = chatData;
+            _chatRepository = chatData;
         }
 
         public IEnumerable<Chat> FindAll()
         {
-            return _chatData.FindAll();
+            return _chatRepository.FindAll();
         }
 
         public Chat NewChat(string chatName, string userId = null)
@@ -37,12 +37,12 @@ namespace ChatBotStocksQuotes.Core.Implementations
                 Name = chatName
             };
 
-            return _chatData.Save(chat);
+            return _chatRepository.Save(chat);
         }
 
         public Chat SignIn(Guid chatUuid, string userId)
         {
-            var chat = _chatData.Find(chatUuid);
+            var chat = _chatRepository.Find(chatUuid);
 
             if (chat == null)
             {
@@ -56,9 +56,7 @@ namespace ChatBotStocksQuotes.Core.Implementations
 
         public void SendMessage(ChatMessage chatMessage)
         {
-            var topic = $"{chatMessage.ChatId}.all";
-
-            _chatProvider.SendMessage(topic, chatMessage);
+            _chatProvider.SendMessageToChatRoom(chatMessage);
         }
     }
 }

@@ -34,17 +34,29 @@ namespace ChatBotStocksQuotes.Api.Hubs
 
             Console.WriteLine($"{consumerTag} - User Entered The Chat");
 
-            _chatProvider.KeepListening(queueName, consumerTag, (Message message) =>
+            _chatProvider.KeepListening(queueName, consumerTag, async (ChatMessage message) =>
             {
-                var chatMessage = new ChatMessage
-                {
-                    ChatId = chatSignIn.ChatId,
-                    From = message.From,
-                    Message = message.Text,
-                    SentAt = message.SentDate
-                };
+                //var chatMessage = new ChatMessage
+                //{
+                //    ChatId = chatSignIn.ChatId,
+                //    From = message.From,
+                //    Message = message.Message,
+                //    SentAt = message.SentAt
+                //};
 
-                Clients.Caller.ReceiveMessage(chatMessage);
+                Console.WriteLine($"{consumerTag} - ReceiveMessage: {message.Message}");
+
+                try
+                {
+                    await Clients.Client(consumerTag).ReceiveMessage(message);
+
+                    //await Clients.Caller.ReceiveMessage(message);
+                }
+                catch (Exception ee )
+                {
+                    Console.WriteLine($"{consumerTag} - ReceiveMessage ERROR: {message.Message}");
+                }
+
             });
 
             return Task.CompletedTask;

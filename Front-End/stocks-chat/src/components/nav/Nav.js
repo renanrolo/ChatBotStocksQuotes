@@ -14,8 +14,12 @@ function Nav({ User, onLogOut }) {
 
     return (
         <header>
-            <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-                <Link className="navbar-brand" to="/">Home</Link>
+            <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
+                <Link className="navbar-brand" to="/">
+                    {!!User ? "Hello, " + User.Email
+                        : "Home"
+                    }
+                </Link>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -25,9 +29,6 @@ function Nav({ User, onLogOut }) {
                         {!!User ?
                             (
                                 <>
-                                    <li className="nav-item">
-                                        <p className="nav navbar-text">Hello, {User.Email}</p>
-                                    </li>
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/" onClick={logOut}>Logout</Link>
                                     </li>
@@ -44,7 +45,6 @@ function Nav({ User, onLogOut }) {
                                     </li>
                                 </>
                             )
-
                         }
 
                     </ul>

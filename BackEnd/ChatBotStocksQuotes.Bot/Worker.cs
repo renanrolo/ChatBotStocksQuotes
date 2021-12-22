@@ -1,4 +1,5 @@
-﻿using ChatBotStocksQuotes.Core.MessageBroker.Config;
+﻿using ChatBotStocksQuotes.Core.Interfaces;
+using ChatBotStocksQuotes.Core.MessageBroker.Config;
 using ChatBotStocksQuotes.Core.MessageBroker.Implementations;
 using ChatBotStocksQuotes.Core.Models;
 using Microsoft.Extensions.Hosting;
@@ -13,11 +14,14 @@ namespace ChatBotStocksQuotes.Bot
     {
         private readonly RabbitMqUow _rabbitMqUow;
         private readonly RabbitMqConfig _rabbitMqConfig;
+        private readonly IChatProvider _chatProvider;
+        private const string stockCommand = "/stock=";
 
-        public Worker(RabbitMqUow rabbitMqUow, RabbitMqConfig rabbitMqConfig)
+        public Worker(RabbitMqUow rabbitMqUow, RabbitMqConfig rabbitMqConfig, IChatProvider chatProvider)
         {
             _rabbitMqUow = rabbitMqUow;
             _rabbitMqConfig = rabbitMqConfig;
+            _chatProvider = chatProvider;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -37,20 +41,46 @@ namespace ChatBotStocksQuotes.Bot
 
                 _rabbitMqUow.Chanel.QueueBind(queueName, _rabbitMqConfig.Exchange, botTopic, null);
 
-                _rabbitMqUow.KeepListening(queueName, (Message message) => {
-                    string topicToUsersOnly = BuildTopicForUser(message);
-                    _rabbitMqUow.Push(topicToUsersOnly, $"I read your message {message.From}");
+                _rabbitMqUow.KeepListening(queueName, "bot", (ChatMessage message) =>
+                {
+                    var botResponse = ProcessUserMessage(message);
+
+                    if (botResponse != null)
+                    {
+                        _chatProvider.SendMessageToUsers(botResponse);
+                    }
                 });
 
-                await Task.Delay(TimeSpan.FromSeconds(10));
+                await Task.Delay(TimeSpan.FromDays(1), stoppingToken);
             }
         }
 
-        private string BuildTopicForUser(Message message)
+        private ChatMessage ProcessUserMessage(ChatMessage chatMessage)
         {
-            var firstTopic = message.RoutingKey.Split(".")[0];
+            if (!chatMessage.Message.StartsWith(stockCommand))
+            {
+                //return null;
 
-            return firstTopic + ".users";
+                Console.WriteLine($"NOT: {chatMessage.Message}");
+
+                return new ChatMessage
+                {
+                    ChatId = chatMessage.ChatId,
+                    From = "bot",
+                    Message = $"NOT: {chatMessage.Message}"
+                };
+            }
+
+            Console.WriteLine($"Command identified on message: {chatMessage.Message}");
+
+            var stockCode = chatMessage.Message.Replace(stockCommand, "");
+
+            return new ChatMessage
+            {
+                ChatId = chatMessage.ChatId,
+                From = "bot",
+                Message = $"Hello {chatMessage.From}, I got your question, I'll look for {stockCode} right away"
+            };
         }
 
         private Dictionary<string, object> BuildQueueArguments()
