@@ -31,6 +31,8 @@ function Chat({ User }) {
                     ChatId: id,
                     UserId: User.Id
                 }
+
+                connection.send("EnterChat", chatParam);
             })
             .catch(e => console.log('Connection failed: ', e));
         
