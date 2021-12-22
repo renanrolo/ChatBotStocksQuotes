@@ -1,0 +1,27 @@
+version: "3.2"
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+        - rabbitmq_go_net
+
+  db:
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+        SA_PASSWORD: "Rvr2021++"
+        ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - c:\data\volume\salserver:/var/opt/mssql/data
+
+networks:
+  rabbitmq_go_net:
+    driver: bridge
