@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,12 +40,12 @@ namespace ChatBotStocksQuotes.Api
                 });
             });
 
-            services.AddDbContext<AuthDbContext>(
+            services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
 
             services.AddIdentity<IdentityUser, IdentityRole>()
-                    .AddEntityFrameworkStores<AuthDbContext>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
 
             services.AddControllers();
@@ -115,6 +116,22 @@ namespace ChatBotStocksQuotes.Api
                 endpoints.MapControllers();
                 endpoints.MapHub<ChatHub>("/hubs/chat");
             });
+
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                context.Database.Migrate();
+
+                var chats = context.Chats;
+                if (!chats.Any(x=> x.Name == "Chat 1"))
+                {
+                    context.Chats.Add(new Core.Entities.Chat { Name = "Chat 1" });
+                    context.Chats.Add(new Core.Entities.Chat { Name = "Chat 2" });
+                    context.Chats.Add(new Core.Entities.Chat { Name = "Chat 3" });
+                }
+
+                context.SaveChanges();
+            }
         }
     }
 }

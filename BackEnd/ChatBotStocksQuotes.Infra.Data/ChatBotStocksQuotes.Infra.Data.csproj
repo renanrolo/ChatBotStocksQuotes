@@ -13,7 +13,7 @@
   <ItemGroup>
     <Compile Include="Migrations\20211220031501_Start.cs" />
     <Compile Include="Migrations\20211220031501_Start.Designer.cs" />
-    <Compile Include="Migrations\AuthDbContextModelSnapshot.cs" />
+    <Compile Include="Migrations\ApplicationDbContextModelSnapshot.cs" />
   </ItemGroup>
 
   <ItemGroup>

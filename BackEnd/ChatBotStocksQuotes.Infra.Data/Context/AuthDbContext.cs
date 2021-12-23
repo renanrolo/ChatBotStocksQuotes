@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChatBotStocksQuotes.Infra.Data.Context
 {
-    public class AuthDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
-        public AuthDbContext(DbContextOptions<AuthDbContext> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
       : base(options)
         { }
 

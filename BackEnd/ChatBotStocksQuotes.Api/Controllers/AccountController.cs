@@ -110,7 +110,7 @@ namespace ChatBotStocksQuotes.Api.Controllers
 
             var expiration = DateTime.UtcNow.AddHours(tokenExpirationInHours);
 
-            JwtSecurityToken token = new JwtSecurityToken(
+            var token = new JwtSecurityToken(
                issuer: null,
                audience: null,
                claims: claims,

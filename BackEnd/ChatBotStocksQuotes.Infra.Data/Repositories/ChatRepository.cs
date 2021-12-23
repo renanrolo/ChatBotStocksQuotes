@@ -9,9 +9,9 @@ namespace ChatBotStocksQuotes.Infra.Data.Repositories
 {
     public class ChatRepository : IChatRepository
     {
-        private readonly AuthDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public ChatRepository(AuthDbContext context)
+        public ChatRepository(ApplicationDbContext context)
         {
             _context = context;
         }
