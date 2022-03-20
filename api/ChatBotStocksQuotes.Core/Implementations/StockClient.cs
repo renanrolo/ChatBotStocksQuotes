@@ -34,31 +34,32 @@ namespace ChatBotStocksQuotes.Core.Implementations
             {
                 var stream = await response.Content.ReadAsStreamAsync();
 
-                using (var reader = new StreamReader(stream))
+                using var reader = new StreamReader(stream);
+
+                var isFirstLine = true;
+
+                while (!reader.EndOfStream)
                 {
-                    var isFirstLine = true;
+                    var line = reader.ReadLine();
 
-                    while (!reader.EndOfStream)
+                    if (isFirstLine)
                     {
-                        var line = reader.ReadLine();
-
-                        if (isFirstLine)
-                        {
-                            isFirstLine = false;
-                            continue;
-                        }
-
-                        if (line.Contains("N/D"))
-                        {
-                            return null;
-                        }
-
-                        return new Stock(line);
+                        isFirstLine = false;
+                        continue;
                     }
+
+                    if (line.Contains("N/D"))
+                    {
+                        return null;
+                    }
+
+                    return new Stock(line);
                 }
             }
 
             return null;
         }
+
+
     }
 }

@@ -22,6 +22,18 @@ services:
     volumes:
       - c:\data\volume\salserver:/var/opt/mssql/data
 
+  api:
+    image:  ${DOCKER_REGISTRY}productswebapi
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    depends_on:
+      - db
+      - rabbitmq
+    ports:
+      - 5000:80
+      - 5001:443
+
 networks:
   rabbitmq_go_net:
     driver: bridge

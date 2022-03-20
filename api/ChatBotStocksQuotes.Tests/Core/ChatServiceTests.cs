@@ -4,10 +4,7 @@ using ChatBotStocksQuotes.Core.Implementations;
 using ChatBotStocksQuotes.Core.Interfaces;
 using Moq;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace ChatBotStocksQuotes.Tests.Core
@@ -16,14 +13,13 @@ namespace ChatBotStocksQuotes.Tests.Core
     {
         private readonly Mock<IChatProvider> _chatProvider;
         private readonly Mock<IChatRepository> _chatRepository;
-
-        private readonly Fixture fixture;
-
         private readonly IChatService _chatService;
+        private readonly Fixture _fixture;
+
 
         public ChatServiceTests()
         {
-            fixture = new Fixture();
+            _fixture = new Fixture();
 
             _chatProvider = new Mock<IChatProvider>();
             _chatRepository = new Mock<IChatRepository>();
@@ -35,7 +31,7 @@ namespace ChatBotStocksQuotes.Tests.Core
         public void AssertFindingAllChats()
         {
             //Arrange
-            var chatListArrange = fixture.Build<Chat>()
+            var chatListArrange = _fixture.Build<Chat>()
                                          .CreateMany(10)
                                          .ToList();
 
@@ -54,7 +50,7 @@ namespace ChatBotStocksQuotes.Tests.Core
             //Arrange
             var chatid = Guid.NewGuid();
 
-            var chat = fixture.Build<Chat>()
+            var chat = _fixture.Build<Chat>()
                               .With(x => x.Id, chatid)
                               .Create();
 
