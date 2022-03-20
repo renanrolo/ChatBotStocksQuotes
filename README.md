@@ -1,5 +1,23 @@
 Hello, this is a little project to show how to use communication with SignalR and RabbitMQ.
 
+WIP: MAJOR CHANGE
+Altering solution to use docker-compose
+1. Front-end:
+    - WIP: TO DO
+2. Back-End API:
+    - OK
+3. Back-End Bot:
+    - OK
+4. RabbitMq:
+    - OK
+5. MsSql:
+    - OK
+
+For now Back-End API is working fine, on docker.compose.yml you can see a little change on the connection string, but thats how it's done.
+
+Back-End API will run on port 5000 with docker-compose, Front-end doesn't know that lol
+
+# Old documentation above
 
 How to run
 1. Front-end

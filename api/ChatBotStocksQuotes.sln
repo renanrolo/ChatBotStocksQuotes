@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31402.337
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBotStocksQuotes.Api", "ChatBotStocksQuotes.Api\ChatBotStocksQuotes.Api.csproj", "{E5113FD2-7FEC-41EB-819D-C55934043B01}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBotStocksQuotes.Api", "ChatBotStocksQuotes.Api\ChatBotStocksQuotes.Api.csproj", "{3C3BBF87-7747-4E03-9F3E-20276FAB5E92}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBotStocksQuotes.Core", "ChatBotStocksQuotes.Core\ChatBotStocksQuotes.Core.csproj", "{632B246E-E12A-4EA2-836A-2E5CE811D9A0}"
 EndProject
@@ -29,10 +29,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E5113FD2-7FEC-41EB-819D-C55934043B01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E5113FD2-7FEC-41EB-819D-C55934043B01}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E5113FD2-7FEC-41EB-819D-C55934043B01}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E5113FD2-7FEC-41EB-819D-C55934043B01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C3BBF87-7747-4E03-9F3E-20276FAB5E92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C3BBF87-7747-4E03-9F3E-20276FAB5E92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C3BBF87-7747-4E03-9F3E-20276FAB5E92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C3BBF87-7747-4E03-9F3E-20276FAB5E92}.Release|Any CPU.Build.0 = Release|Any CPU	
 		{632B246E-E12A-4EA2-836A-2E5CE811D9A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{632B246E-E12A-4EA2-836A-2E5CE811D9A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{632B246E-E12A-4EA2-836A-2E5CE811D9A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -62,7 +62,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E5113FD2-7FEC-41EB-819D-C55934043B01} = {8F0EF37B-819B-4A1A-91DC-1E9F4781C205}
+		{3C3BBF87-7747-4E03-9F3E-20276FAB5E92} = {8F0EF37B-819B-4A1A-91DC-1E9F4781C205}
 		{632B246E-E12A-4EA2-836A-2E5CE811D9A0} = {28D30B7B-D2D2-4176-87B3-7809516BF059}
 		{01EC43BE-353B-4AAA-803F-BC536C2ACDC6} = {9199F2B8-D67F-4839-A6B5-623748A1C04A}
 		{148E5F7D-54A8-4830-A87C-510CFEA098D7} = {28D30B7B-D2D2-4176-87B3-7809516BF059}

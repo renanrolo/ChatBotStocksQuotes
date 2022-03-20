@@ -21,19 +21,26 @@ services:
       - "1433:1433"
     volumes:
       - c:\data\volume\salserver:/var/opt/mssql/data
+    networks:
+      - net_database
 
   api:
     image:  ${DOCKER_REGISTRY}productswebapi
     build:
-      context: .
-      dockerfile: api/Dockerfile
+      context: ./api/
+      dockerfile: ChatBotStocksQuotes.Api/Dockerfile
     depends_on:
       - db
       - rabbitmq
     ports:
       - 5000:80
-      - 5001:443
+    networks:
+      - net_database
+    environment: 
+      - ConnectionStrings:DefaultConnection=Server=db;Database=stocks;User=sa;Password=Rvr2021++;
 
 networks:
   rabbitmq_go_net:
+    driver: bridge
+  net_database:
     driver: bridge

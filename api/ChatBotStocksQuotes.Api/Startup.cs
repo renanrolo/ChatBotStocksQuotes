@@ -72,10 +72,10 @@ namespace ChatBotStocksQuotes.Api
                     .AddHttpClient();
 
             services.AddAuthentication(x =>
-                {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                }
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }
                 ).AddJwtBearer(options =>
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -123,7 +123,7 @@ namespace ChatBotStocksQuotes.Api
                 context.Database.Migrate();
 
                 var chats = context.Chats;
-                if (!chats.Any(x=> x.Name == "Chat 1"))
+                if (!chats.Any(x => x.Name == "Chat 1"))
                 {
                     context.Chats.Add(new Core.Entities.Chat { Name = "Chat 1" });
                     context.Chats.Add(new Core.Entities.Chat { Name = "Chat 2" });
